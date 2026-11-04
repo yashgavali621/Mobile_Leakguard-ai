@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Login - restructured.
+  Previously every element was stacked flush-left against a flat beige
+  background, so the screen had no focal point and the form floated. Now a
+  navy gradient banner carries the brand mark, and the form sits on a white
+  card that overlaps the banner. That gives a clear visual hierarchy
+  (brand -> task -> action) and reads as a finished product screen.
+-->
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/space_xl">
+
+        <!-- ===== Brand banner ===== -->
+        <View
+            android:id="@+id/viewHeader"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/auth_header_height"
+            android:background="@drawable/bg_auth_header"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imageLogo"
+            android:layout_width="@dimen/auth_logo_size"
+            android:layout_height="@dimen/auth_logo_size"
+            android:layout_marginTop="@dimen/space_xl"
+            android:contentDescription="@string/cd_app_logo"
+            android:src="@drawable/ic_logo_mark_light"
+            app:layout_constraintEnd_toEndOf="@id/viewHeader"
+            app:layout_constraintStart_toStartOf="@id/viewHeader"
+            app:layout_constraintTop_toTopOf="@id/viewHeader" />
+
+        <TextView
+            android:id="@+id/textHeadline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_md"
+            android:letterSpacing="0.01"
+            android:text="@string/app_name"
+            android:textColor="@color/text_on_primary"
+            android:textSize="@dimen/text_display"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@id/viewHeader"
+            app:layout_constraintStart_toStartOf="@id/viewHeader"
+            app:layout_constraintTop_toBottomOf="@id/imageLogo" />
+
+        <TextView
+            android:id="@+id/textSubtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_xs"
+            android:text="@string/app_tagline"
+            android:textColor="@color/text_on_primary_muted"
+            android:textSize="@dimen/text_body"
+            app:layout_constraintEnd_toEndOf="@id/viewHeader"
+            app:layout_constraintStart_toStartOf="@id/viewHeader"
+            app:layout_constraintTop_toBottomOf="@id/textHeadline" />
+
+        <!-- ===== Form card, overlapping the banner ===== -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardForm"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_md"
+            android:layout_marginTop="-36dp"
+            android:layout_marginEnd="@dimen/space_md"
+            app:cardBackgroundColor="@color/surface"
+            app:cardCornerRadius="@dimen/radius_lg"
+            app:cardElevation="6dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/viewHeader"
+            app:layout_constraintWidth_max="@dimen/auth_card_max_width"
+            app:strokeColor="@color/divider"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/space_lg">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/title_welcome_back"
+                    android:textAppearance="@style/TextAppearance.LeakGuardAI.Headline" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_xxs"
+                    android:text="@string/subtitle_login"
+                    android:textAppearance="@style/TextAppearance.LeakGuardAI.BodySecondary" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layoutEmail"
+                    style="@style/Widget.LeakGuardAI.TextInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_lg"
+                    android:hint="@string/label_email"
+                    app:startIconDrawable="@drawable/ic_mail"
+                    app:startIconTint="@color/text_tertiary">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/inputEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:autofillHints="emailAddress"
+                        android:imeOptions="actionNext"
+                        android:inputType="textEmailAddress"
+                        android:maxLines="1" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layoutPassword"
+                    style="@style/Widget.LeakGuardAI.TextInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_md"
+                    android:hint="@string/label_password"
+                    app:endIconMode="password_toggle"
+                    app:endIconTint="@color/text_tertiary"
+                    app:startIconDrawable="@drawable/ic_lock"
+                    app:startIconTint="@color/text_tertiary">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/inputPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:autofillHints="password"
+                        android:imeOptions="actionDone"
+                        android:inputType="textPassword"
+                        android:maxLines="1" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/textForgotPassword"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/touch_target_min"
+                    android:layout_gravity="end"
+                    android:gravity="center_vertical"
+                    android:text="@string/action_forgot_password"
+                    android:textColor="@color/text_link"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/buttonLogin"
+                    style="@style/Widget.LeakGuardAI.Button.Primary"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/button_height"
+                    android:layout_marginTop="@dimen/space_sm"
+                    android:text="@string/action_login" />
+
+                <ProgressBar
+                    android:id="@+id/progressLogin"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/space_md"
+                    android:indeterminateTint="@color/accent_teal"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/textError"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_md"
+                    android:background="@drawable/bg_error_banner"
+                    android:padding="@dimen/space_md"
+                    android:textColor="@color/semantic_danger"
+                    android:textSize="14sp"
+                    android:visibility="gone"
+                    tools:text="Invalid email or password"
+                    tools:visibility="visible" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:id="@+id/textGoToRegister"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/touch_target_min"
+            android:layout_marginTop="@dimen/space_md"
+            android:gravity="center"
+            android:paddingStart="@dimen/space_md"
+            android:paddingEnd="@dimen/space_md"
+            android:text="@string/prompt_no_account"
+            android:textColor="@color/text_link"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cardForm" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

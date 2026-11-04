@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Reusable "EmptyState" component (see presentation/common/EmptyStateView.java).
+     merge root so it can be inflated straight into any parent ViewGroup. -->
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/space_xl"
+        android:paddingVertical="@dimen/space_xxl">
+
+        <FrameLayout
+            android:layout_width="104dp"
+            android:layout_height="104dp"
+            android:background="@drawable/bg_icon_circle"
+            android:backgroundTint="@color/accent_teal_light">
+
+            <ImageView
+                android:id="@+id/imageEmptyState"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:layout_gravity="center"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_empty_state" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/textEmptyTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_lg"
+            android:gravity="center"
+            android:textAppearance="@style/TextAppearance.LeakGuardAI.Title" />
+
+        <TextView
+            android:id="@+id/textEmptyBody"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_xs"
+            android:gravity="center"
+            android:textAppearance="@style/TextAppearance.LeakGuardAI.BodySecondary" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonEmptyAction"
+            style="@style/Widget.LeakGuardAI.Button.Outline"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/button_height"
+            android:layout_marginTop="@dimen/space_lg"
+            android:visibility="gone" />
+
+    </LinearLayout>
+</merge>

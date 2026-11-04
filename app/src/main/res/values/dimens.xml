@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 8dp spacing system -->
+    <dimen name="space_xxs">2dp</dimen>
+    <dimen name="space_xs">4dp</dimen>
+    <dimen name="space_sm">8dp</dimen>
+    <dimen name="space_md">16dp</dimen>
+    <dimen name="space_lg">24dp</dimen>
+    <dimen name="space_xl">32dp</dimen>
+    <dimen name="space_xxl">48dp</dimen>
+
+    <!-- Corner radius -->
+    <dimen name="radius_sm">6dp</dimen>
+    <dimen name="radius_md">10dp</dimen>
+    <dimen name="radius_lg">16dp</dimen>
+    <dimen name="radius_xl">28dp</dimen>
+    <dimen name="radius_pill">999dp</dimen>
+
+    <!-- Auth screens -->
+    <dimen name="auth_header_height">220dp</dimen>
+    <dimen name="auth_logo_size">76dp</dimen>
+    <dimen name="auth_card_max_width">460dp</dimen>
+
+    <!-- Elevation -->
+    <dimen name="elevation_none">0dp</dimen>
+    <dimen name="elevation_card">1dp</dimen>
+    <dimen name="elevation_raised">4dp</dimen>
+
+    <!-- Touch targets -->
+    <dimen name="touch_target_min">48dp</dimen>
+    <dimen name="button_height">52dp</dimen>
+    <dimen name="input_height">56dp</dimen>
+
+    <!-- Typography -->
+    <dimen name="text_display">28sp</dimen>
+    <dimen name="text_headline">22sp</dimen>
+    <dimen name="text_title">18sp</dimen>
+    <dimen name="text_body">15sp</dimen>
+    <dimen name="text_body_small">13sp</dimen>
+    <dimen name="text_caption">12sp</dimen>
+
+    <!-- Icons -->
+    <dimen name="icon_sm">18dp</dimen>
+    <dimen name="icon_md">24dp</dimen>
+    <dimen name="icon_lg">32dp</dimen>
+</resources>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">LeakGuard AI</string>
+    <string name="app_tagline">Know Where Your Money Leaks.</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_title_1">Track Your Spending</string>
+    <string name="onboarding_body_1">Understand where your money goes.</string>
+    <string name="onboarding_title_2">Detect Hidden Leaks</string>
+    <string name="onboarding_body_2">Find recurring payments, subscriptions and price increases.</string>
+    <string name="onboarding_title_3">Get Important Alerts</string>
+    <string name="onboarding_body_3">Know about renewals, unusual transactions and bills.</string>
+    <string name="action_skip">Skip</string>
+    <string name="action_next">Next</string>
+    <string name="action_get_started">Get Started</string>
+
+    <!-- Auth -->
+    <string name="label_email">Email</string>
+    <string name="label_password">Password</string>
+    <string name="label_confirm_password">Confirm password</string>
+    <string name="label_full_name">Full name</string>
+    <string name="action_login">Log in</string>
+    <string name="action_register">Create account</string>
+    <string name="action_forgot_password">Forgot password?</string>
+    <string name="action_reset_password">Send reset link</string>
+    <string name="prompt_no_account">Don\'t have an account? Sign up</string>
+    <string name="prompt_have_account">Already have an account? Log in</string>
+    <string name="error_email_invalid">Enter a valid email address</string>
+    <string name="error_password_short">Password must be at least 8 characters</string>
+    <string name="error_password_mismatch">Passwords don\'t match</string>
+    <string name="error_name_required">Enter your full name</string>
+    <string name="error_generic_network">Couldn\'t reach the server. Check your connection and try again.</string>
+    <string name="msg_check_email_verification">We sent a verification link to your email. Confirm it, then log in.</string>
+
+    <!-- Bottom navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_subscriptions">Subscriptions</string>
+    <string name="nav_alerts">Alerts</string>
+    <string name="nav_ai">AI</string>
+    <string name="nav_profile">Profile</string>
+
+    <!-- Screen titles (fragment headers) - distinct from the short nav_* tab
+         labels above, e.g. the AI tab is labelled "AI" but its screen header
+         reads "AI Insights". Previously these were hardcoded English strings
+         directly in the layouts, inconsistent with the rest of the app and
+         unable to be localized. -->
+    <string name="title_subscriptions">Subscriptions</string>
+    <string name="title_alerts">Alerts</string>
+    <string name="title_ai_insights">AI Insights</string>
+
+    <!-- Empty states (Phase 1: no data pipeline yet, so these are genuinely what a fresh account sees) -->
+    <string name="empty_dashboard_title">No financial data yet</string>
+    <string name="empty_dashboard_body">Connect a bank statement, Gmail, or notification access to start finding leaks.</string>
+    <string name="empty_subscriptions_title">No subscriptions detected</string>
+    <string name="empty_subscriptions_body">Once a source is connected, recurring payments will show up here.</string>
+    <string name="empty_alerts_title">No alerts</string>
+    <string name="empty_alerts_body">You\'ll see renewal reminders, price changes and unusual activity here.</string>
+    <string name="empty_insights_title">No insights yet</string>
+    <string name="empty_insights_body">AI Insights need at least one connected data source to analyze.</string>
+    <string name="action_connect_a_source">Connect a source</string>
+
+    <!-- Profile (Phase 1 minimal) -->
+    <string name="profile_edit">Edit profile</string>
+    <string name="profile_logout">Log out</string>
+    <string name="profile_section_account">ACCOUNT</string>
+    <string name="profile_label_currency">Currency</string>
+    <string name="profile_label_monthly_budget">Monthly budget</string>
+    <string name="profile_connected_sources">Connected sources</string>
+    <string name="title_welcome_back">Welcome back</string>
+    <string name="subtitle_login">Log in to keep an eye on your money.</string>
+    <string name="title_create_account">Create your account</string>
+    <string name="subtitle_register">It takes less than a minute to get started.</string>
+    <string name="title_reset_password">Reset your password</string>
+    <string name="subtitle_reset_password">Enter the email on your account and we\'ll send you a secure reset link.</string>
+    <string name="helper_password_rule">At least 8 characters</string>
+    <string name="cd_app_logo">LeakGuard AI logo</string>
+    <string name="stat_spend_30d">Spent (30 days)</string>
+    <string name="stat_recurring">Recurring</string>
+    <string name="stat_alerts">Alerts</string>
+    <string name="section_recent_activity">RECENT ACTIVITY</string>
+    <string name="load_error_title">Couldn\'t load your data</string>
+    <string name="subtitle_subscriptions">Recurring payments we found for you</string>
+    <string name="subtitle_alerts">Renewals, price changes and unusual activity</string>
+    <string name="subtitle_ai_insights">Smart tips to plug your money leaks</string>
+</resources>

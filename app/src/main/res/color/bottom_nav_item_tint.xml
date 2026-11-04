@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Referenced by Widget.LeakGuardAI.BottomNav (values/styles.xml). This file
+     was missing entirely, which made the whole app fail to build - any
+     unresolved @color/ reference breaks resource linking for every screen,
+     not just the one that uses it. -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:color="@color/accent_teal_dark" android:state_checked="true" />
+    <item android:color="@color/text_tertiary" android:state_checked="false" />
+</selector>

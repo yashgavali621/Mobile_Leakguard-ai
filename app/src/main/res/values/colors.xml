@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- =====================================================================
+         BRAND  -  deep navy with a teal accent.
+         The old palette paired navy with a muted grey-blue, which read flat
+         and washed out on device. The navy is now slightly cooler and deeper
+         (better contrast on white), and a single saturated teal carries every
+         accent, so the interface has one clear focal colour instead of three
+         competing blues.
+         ===================================================================== -->
+    <color name="brand_primary">#123253</color>          <!-- Deep navy -->
+    <color name="brand_primary_dark">#0B2036</color>
+    <color name="brand_primary_light">#1D4A77</color>
+    <color name="brand_secondary">#2F6EA8</color>
+    <color name="brand_secondary_light">#E3ECF6</color>
+
+    <color name="accent_teal">#2DBFA8</color>            <!-- Primary accent -->
+    <color name="accent_teal_dark">#1E9B87</color>
+    <color name="accent_teal_light">#E1F6F2</color>
+
+    <!-- ===================== SEMANTIC ===================== -->
+    <color name="semantic_success">#158A5C</color>
+    <color name="semantic_success_bg">#E2F5EC</color>
+    <color name="semantic_warning">#B77510</color>
+    <color name="semantic_warning_bg">#FCF1DD</color>
+    <color name="semantic_danger">#C0392B</color>
+    <color name="semantic_danger_bg">#FBE9E7</color>
+    <color name="semantic_info">#2F6EA8</color>
+    <color name="semantic_info_bg">#E6EFF8</color>
+    <color name="semantic_neutral">#64748B</color>
+    <color name="semantic_neutral_bg">#EEF1F5</color>
+
+    <!-- =====================================================================
+         SURFACES  -  a cool near-white instead of the previous warm beige.
+         Beige next to navy reads as dated; a cool slate-tinted white keeps
+         the navy looking intentional and makes white cards actually lift off
+         the background.
+         ===================================================================== -->
+    <color name="background">#F4F6F9</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="surface_alt">#EDF1F6</color>
+    <color name="divider">#E2E8F0</color>
+    <color name="outline">#CBD5E1</color>
+    <color name="scrim">#14000000</color>
+
+    <!-- ===================== TEXT ===================== -->
+    <color name="text_primary">#101828</color>
+    <color name="text_secondary">#5A6779</color>
+    <color name="text_tertiary">#94A3B8</color>
+    <color name="text_on_primary">#FFFFFF</color>
+    <color name="text_on_primary_muted">#B9CBDE</color>
+    <color name="text_link">#1D4A77</color>
+
+    <!-- ===================== CONFIDENCE BADGE SCALE ===================== -->
+    <color name="confidence_high">#158A5C</color>
+    <color name="confidence_medium">#B77510</color>
+    <color name="confidence_low">#64748B</color>
+
+    <color name="transparent">#00000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+</resources>
