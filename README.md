@@ -1,269 +1,326 @@
-# LeakGuard AI
+import pypandoc, os
 
-**Know Where Your Money Leaks.**
+readme = r'''<div align="center">
 
-A privacy-focused financial intelligence Android app (Java + XML, MVVM,
-Supabase backend) that detects hidden subscriptions, recurring payments,
-price hikes and unusual transactions across bank statements, Gmail, phone
-notifications and (where policy-compliant) SMS.
+# 🛡️ LeakGuard AI
 
----
+### Know Where Your Money Leaks.
 
-## 0. Where this build actually is right now
+A privacy-conscious Android application foundation for tracking financial activity and building smarter awareness of recurring payments, subscriptions, and potential money leaks.
 
-This is a large, multi-phase product (24 screens, a full Supabase backend,
-Gmail OAuth via a server, Gemini via Edge Functions, NotificationListenerService,
-SMS handling, Room, WorkManager...). It is being built **phase by phase**,
-each phase fully real - no fake buttons, no mock "connected" states, no
-hardcoded dashboard numbers - rather than dropped in all at once as hollow
-scaffolding.
+<br/>
 
-**Phase 1 (this build) is done:**
-- Project skeleton, Gradle config, `.gitignore`, environment examples
-- Full design system (`colors.xml`, `dimens.xml`, `strings.xml`,
-  `themes.xml`, `styles.xml`) matching the "professional fintech, not
-  AI-template" visual direction
-- 5-tab bottom navigation (`MainActivity`) that preserves fragment state
-  when switching tabs and handles back-press correctly
-- **Real** Supabase Auth: Splash -> Onboarding (3 pages) -> Register / Login
-  / Forgot Password, all calling the actual Supabase GoTrue REST API
-  (sign up, sign in, session refresh, logout, password recovery), with
-  session tokens stored in Keystore-backed `EncryptedSharedPreferences`
-- A real `profiles` row created on signup, read/updated via PostgREST
-- Dashboard / Subscriptions / Alerts / AI tabs show **honest empty states**
-  (no data pipeline exists yet, so there is nothing to fabricate) instead of
-  placeholder or fake content
-- Profile tab shows real account info and a fully working logout
-- The **complete Supabase database schema**: all 20 tables from the product
-  spec, UUID primary keys, `created_at`/`updated_at`, indexes on `user_id`,
-  `transaction_date`, merchant, `event_type`, `subscription_id` and alert
-  read-status, and Row Level Security policies on every user-owned table
-- Storage bucket + RLS-equivalent storage policies for the future Bank
-  Statement / Reports PDF upload paths
+[![Platform](https://img.shields.io/badge/Platform-Android-3DDC84?logo=android&logoColor=white)](https://developer.android.com/)
+[![Language](https://img.shields.io/badge/Language-Java-orange?logo=openjdk&logoColor=white)](https://www.java.com/)
+[![UI](https://img.shields.io/badge/UI-XML-4285F4)](https://developer.android.com/develop/ui/views/layout/declaring-layout)
+[![Backend](https://img.shields.io/badge/Backend-Supabase-3ECF8E?logo=supabase&logoColor=white)](https://supabase.com/)
+[![Build](https://img.shields.io/badge/Build-Gradle_8.7-02303A?logo=gradle&logoColor=white)](https://gradle.org/)
 
-**Not built yet** (each is a real phase, not a stub, tracked below):
-Permission Center, Bank Statement upload/parsing, Gmail integration,
-NotificationListenerService, SMS abstraction, the Financial Event engine
-(recurring/subscription/price-hike/duplicate detection), the Alert engine
-and Android notification channels wiring, the Gemini Edge Function, Spending
-Analytics/Savings/Renewal Calendar/Budget/Goals/Financial Health/Reports
-screens, Room local cache, WorkManager background sync, and the full test
-suite.
-
-### A note on "compiles cleanly"
-
-This project was authored and carefully reviewed by hand (package/directory
-consistency, ViewBinding field names cross-checked against every layout's
-`android:id`s, XML well-formedness and Java brace/paren balance all
-verified programmatically) in a sandboxed environment **without an Android
-SDK**, so `./gradlew build` could not actually be run here. Open the
-project in Android Studio, let it sync, and if anything doesn't compile,
-report the exact error - the codebase is small enough right now to fix
-quickly, and this README will be updated as later phases land.
+</div>
 
 ---
 
-## 1. Architecture
+## 📖 About the Project
 
-```
-com.leakguard.ai
-├── data/
-│   ├── local/          SessionManager (EncryptedSharedPreferences).
-│   │                   Room cache lands in Phase 7.
-│   ├── remote/
-│   │   ├── supabase/    Retrofit client, Auth/Database API interfaces,
-│   │   │                AuthInterceptor, error parsing
-│   │   └── dto/          Wire-format classes (Gson)
-│   └── repository/      AuthRepository, ProfileRepository - the ONLY
-│                         classes allowed to call the network APIs
-├── domain/
-│   └── model/            Plain domain models (User, Profile, ...)
-├── presentation/
-│   ├── splash/ onboarding/ auth/ main/
-│   ├── dashboard/ subscriptions/ alerts/ insights/ profile/
-│   └── common/           Reusable components (EmptyStateView, ...)
-├── utils/                 Resource<T>, Constants, ValidationUtils, ...
-└── LeakGuardApplication.java
-```
+**LeakGuard AI** is an Android project focused on helping users gain better visibility into their financial activity. The product direction is to identify recurring payments, manage subscriptions, highlight price changes, and surface potentially unusual transactions from supported data sources.
 
-Strict layering: Activities/Fragments never call Retrofit directly - only
-through a Repository, exposed to the UI via a `ViewModel` + `LiveData`
-(`Resource<T>` wraps Loading/Success/Error so every screen renders all
-three states, never a raw exception).
+The application is being developed in phases. The current repository contains the Android foundation, onboarding and authentication flow, profile integration, navigation, and Supabase database setup. Financial data ingestion, automated detection, and AI-powered insights are planned future development phases and are **not represented as completed features** in the current build.
 
----
+> **Current implementation:** Android application foundation, Supabase email authentication, profile handling, five-section navigation, and database migrations.
 
-## 2. Prerequisites
+## ✨ Current Implementation
 
-- Android Studio (Koala/2024.1 or newer recommended)
-- JDK 17 (bundled with recent Android Studio)
-- A free [Supabase](https://supabase.com) project
-- (Later phases) A Google Cloud project for Gmail OAuth, and a Gemini API key
+- **Onboarding flow** — introductory screens for first-time users.
+- **Authentication** — Supabase email registration, login, session refresh, logout, and password recovery.
+- **Encrypted session storage** — authentication session data stored using AndroidX encrypted preferences.
+- **Profile integration** — create, retrieve, and update user profile data through Supabase.
+- **Five-section navigation** — Dashboard, Subscriptions, Alerts, AI Insights, and Profile.
+- **Honest empty states** — screens without a connected data pipeline display empty states rather than fabricated financial data.
+- **Database foundation** — SQL migrations for the initial schema, indexes, triggers, storage setup, and Row Level Security (RLS) policies.
+- **Layered code structure** — separates presentation, domain, data, and repository responsibilities.
 
----
+## 🧰 Technology Stack
 
-## 3. Supabase setup
-
-1. Create a project at [supabase.com](https://supabase.com).
-2. In the Supabase Dashboard, open **SQL Editor** and run, in order:
-   - `supabase/migrations/0001_init_schema.sql` - creates all 20 tables,
-     indexes, triggers and RLS policies.
-   - `supabase/migrations/0002_storage_setup.sql` - creates the
-     `leakguard-files` private bucket and its storage RLS policies (used
-     starting Phase 3, safe to run now).
-3. Go to **Project Settings -> Data API** (or **API** on older dashboards)
-   and copy:
-   - **Project URL** -> `SUPABASE_URL`
-   - **anon / publishable key** -> `SUPABASE_PUBLISHABLE_KEY`
-
-   Never copy the **service_role** key into anything client-side - it
-   bypasses Row Level Security entirely and belongs only in the (future)
-   Edge Function secrets, per `.env.example`.
-4. Under **Authentication -> Providers -> Email**, decide whether you want
-   "Confirm email" on or off while testing. The app handles both: if it's
-   on, Register shows a "check your email" dialog instead of logging the
-   user straight in.
-5. (Optional, recommended) Verify RLS is actually doing its job using the
-   checklist at the bottom of `0001_init_schema.sql`.
-
----
-
-## 4. Android app setup
-
-1. Copy `local.properties.example` to `local.properties` (same folder,
-   already git-ignored) and fill in:
-   ```properties
-   sdk.dir=/path/to/Android/sdk
-   SUPABASE_URL=https://YOUR-PROJECT.supabase.co
-   SUPABASE_PUBLISHABLE_KEY=YOUR_SUPABASE_ANON_KEY
-   ```
-   (`GOOGLE_WEB_CLIENT_ID`, `GOOGLE_ANDROID_CLIENT_ID` and
-   `BACKEND_BASE_URL` aren't used until the Gmail phase - leave the
-   placeholders for now.)
-2. Open the project root folder in Android Studio and let it sync. The
-   supplied archive does not include the Gradle wrapper scripts or wrapper
-   JAR, so use Android Studio's bundled Gradle to sync/build, or install
-   Gradle locally and run `gradle wrapper` from the project root to generate
-   wrapper files before using `./gradlew`.
-3. Run the `app` module on an emulator or device (minSdk 26 / Android 8.0+).
-4. You should land on the Splash screen, then Onboarding (first run), then
-   Login/Register. Create an account, and you should land on the Dashboard
-   tab showing an honest empty state.
-
----
-
-## 5. Environment variables reference
-
-**Android (`local.properties`, git-ignored):**
-
-| Key | Used for | Needed in Phase 1? |
-|---|---|---|
-| `SUPABASE_URL` | Supabase REST/Auth base URL | Yes |
-| `SUPABASE_PUBLISHABLE_KEY` | Supabase anon key | Yes |
-| `GOOGLE_WEB_CLIENT_ID` | Gmail OAuth (server-side code exchange) | Not yet |
-| `GOOGLE_ANDROID_CLIENT_ID` | Gmail OAuth (Android client registration) | Not yet |
-| `BACKEND_BASE_URL` | Edge Functions base URL | Not yet |
-
-**Backend / Edge Functions (`.env`, git-ignored):**
-
-| Key | Used for | Needed in Phase 1? |
-|---|---|---|
-| `SUPABASE_URL` | Server-side Supabase access | Not yet (no functions deployed) |
-| `SUPABASE_SERVICE_ROLE_KEY` | Bypasses RLS - server-only | Not yet |
-| `GEMINI_API_KEY` | `financial-ai` Edge Function | Not yet (Phase 10) |
-| `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | `gmail-sync` Edge Function | Not yet (Phase 4) |
-| `TOKEN_ENCRYPTION_SECRET` | Encrypting stored Gmail refresh tokens | Not yet (Phase 4) |
-
----
-
-## 6. Build / test checklist for this phase
-
-- [ ] `local.properties` created with real Supabase URL + anon key
-- [ ] Both SQL migrations run successfully in the Supabase SQL Editor
-- [ ] Gradle sync succeeds in Android Studio
-- [ ] App launches to Splash -> Onboarding (first run only)
-- [ ] Register creates a Supabase Auth user AND a `profiles` row (check the
-      **Table Editor** in Supabase)
-- [ ] Login works with the account just created
-- [ ] Logout clears the session and returns to Login
-- [ ] Force-closing and reopening the app after logging in goes straight to
-      the Dashboard (session persistence/restoration)
-- [ ] Airplane mode + Login attempt shows a "check your connection" message,
-      not a crash
-- [ ] Switching between the 5 bottom-nav tabs doesn't reset scroll position
-      or reload data unnecessarily
-- [ ] Back button on any non-Home tab returns to Home before exiting the app
-
----
-
-## 7. Troubleshooting
-
-- **"LeakGuard isn't connected to its server yet" message on every auth
-  screen** - you haven't created `local.properties` from the example, or
-  Android Studio hasn't re-synced since you added it. Sync Gradle again.
-  (Earlier builds crashed outright here instead of showing this message -
-  fixed in `SupabaseConfig`.)
-- **"Invalid API key"** - almost always a copy/paste issue in
-  `local.properties`: no quotes around the value, the anon/publishable key
-  (never `service_role`), and the key must belong to the *same* project as
-  `SUPABASE_URL`. Run `./gradlew clean assembleDebug` after editing -
-  `BuildConfig` is generated at build time and a plain re-run can reuse a
-  stale value.
-- **"Invalid path specified in request URL"** - `SUPABASE_URL` has a path on
-  it (e.g. pasted the Functions URL, or `/rest/v1`). It must be the origin
-  only: `https://xxxxxxxx.supabase.co`, nothing after the host.
-  `SupabaseConfig.getBaseUrl()` now strips any path defensively, but keep it
-  clean in `local.properties` regardless.
-- **401 on every request** - double check you copied the **anon/publishable**
-  key, not the service_role key (the app should never hold that one, but
-  if it did, RLS-scoped `Authorization: Bearer <anon key>` calls for
-  anonymous endpoints would still fail if the wrong key is pasted).
-- **Sign-up succeeds but no `profiles` row appears** - check Supabase's
-  **Authentication -> Providers -> Email -> Confirm email** setting; if
-  it's on, the profile is created immediately after signup regardless, but
-  if you're testing against a project where `0001_init_schema.sql` wasn't
-  fully applied, the `profiles` insert will fail RLS or schema checks -
-  re-run the migration and check the SQL Editor's error output.
-- **Gradle can't find `gradle-wrapper.jar`** - see step 2 in Android setup
-  above.
-
----
-
-## 8. Full build roadmap (matches the product spec's own phase plan)
-
-| Phase | Scope |
+| Area | Technology |
 |---|---|
-| 1 (done) | Project setup, theme, architecture, navigation, auth |
-| 2 | Full DB schema (done early), Profile screen enrichment |
-| 3 | Bank Statement upload (PDF/CSV), parsing, transaction import |
-| 4 | Gmail integration (OAuth + `gmail-sync` Edge Function) |
-| 5 | NotificationListenerService + Permission Center |
-| 6 | SMS policy-compliant integration / fallback |
-| 7 | Financial Event engine + Room local cache |
-| 8 | Subscriptions, recurring detection, price-change detection, duplicate matching |
-| 9 | Alert engine + Android notification channels + WorkManager |
-| 10 | Gemini AI (`financial-ai` Edge Function) + AI Insights screen |
-| 11 | Spending Analytics, Savings Center, Renewal Calendar, Budget Planner, Financial Goals, Financial Health/Leak Score, Reports |
-| 12 | Security hardening, full unit/instrumented test suite, performance pass, final QA |
+| Platform | Android |
+| Language | Java |
+| User interface | XML layouts, Material Components |
+| Architecture | MVVM-inspired layered architecture |
+| UI state | ViewModel, LiveData, View Binding |
+| Networking | Retrofit, OkHttp |
+| JSON parsing | Gson |
+| Backend | Supabase |
+| Authentication | Supabase Auth REST API |
+| Database API | Supabase PostgREST |
+| Session security | AndroidX Security / EncryptedSharedPreferences |
+| Build system | Gradle |
+| Database setup | Supabase SQL migrations |
+
+## 🏗️ Architecture
+
+The project uses a layered structure to keep UI code, application logic, and remote data access organized.
+
+```text
+com.leakguard.ai
+│
+├── data/
+│   ├── local/              # Local session management
+│   ├── remote/
+│   │   ├── dto/            # API request and response models
+│   │   └── supabase/       # Supabase APIs and networking
+│   └── repository/         # Authentication and profile repositories
+│
+├── domain/
+│   └── model/              # Core application models
+│
+├── presentation/
+│   ├── splash/
+│   ├── onboarding/
+│   ├── auth/
+│   ├── main/
+│   ├── dashboard/
+│   ├── subscriptions/
+│   ├── alerts/
+│   ├── insights/
+│   ├── profile/
+│   └── common/
+│
+└── utils/                  # Shared utilities and helpers
+```
+
+**Typical data flow**
+
+```text
+Activity / Fragment
+        ↓
+     ViewModel
+        ↓
+    Repository
+        ↓
+ Retrofit / Supabase API
+        ↓
+   Supabase Backend
+```
+
+Presentation components should access remote data through repositories rather than calling API interfaces directly.
+
+## 🚀 Getting Started
+
+### 1. Prerequisites
+
+Install the following tools:
+
+- [Android Studio](https://developer.android.com/studio) — recent stable version recommended
+- **JDK 17** — the JDK bundled with Android Studio is suitable
+- **Android SDK Platform 34** and Android SDK Build-Tools
+- [Git](https://git-scm.com/downloads)
+- A [Supabase](https://supabase.com/) account and project
+
+**Project configuration:** Android Gradle Plugin 8.5.2, Gradle 8.7, `compileSdk 34`, `targetSdk 34`, and `minSdk 26` (Android 8.0).
+
+### 2. Clone the repository
+
+```bash
+git clone https://github.com/yashgavali621/Mobile_Leakguard-ai.git
+```
+
+Open the cloned project root — the folder containing `settings.gradle` — in Android Studio.
+
+### 3. Create and configure Supabase
+
+1. Sign in to [Supabase](https://supabase.com/) and create a project.
+2. Wait for the project to finish provisioning.
+3. Open **Project Settings → API** (the exact menu label may vary).
+4. Copy the **Project URL** and the **anon / publishable key**.
+
+### 4. Set up the database
+
+In the Supabase dashboard, open **SQL Editor** and run the migration scripts in order:
+
+1. `supabase/migrations/0001_init_schema.sql`
+2. `supabase/migrations/0002_storage_setup.sql`
+3. `supabase/migrations/0003_email_sms_integration.sql` — run after the first two when preparing the email/SMS integration database objects.
+
+Run each script once and verify that it completes without errors. Review the SQL and RLS policies in your own Supabase project before using real data.
+
+### 5. Configure local project properties
+
+In the project root, make a copy of:
+
+```text
+local.properties.example
+```
+
+Name the copy:
+
+```text
+local.properties
+```
+
+Add your Android SDK path and your Supabase project values. Example for Windows:
+
+```properties
+sdk.dir=C\:\\Users\\YOUR_USERNAME\\AppData\\Local\\Android\\Sdk
+SUPABASE_URL=https://YOUR_PROJECT_ID.supabase.co
+SUPABASE_PUBLISHABLE_KEY=YOUR_SUPABASE_PUBLISHABLE_OR_ANON_KEY
+```
+
+Replace the sample values with your own. Android Studio may configure `sdk.dir` automatically; if so, retain the SDK path it supplies.
+
+The optional integration values can remain placeholders until those integrations are implemented and configured:
+
+```properties
+GOOGLE_WEB_CLIENT_ID=
+GOOGLE_ANDROID_CLIENT_ID=
+BACKEND_BASE_URL=
+```
+
+> **Important:** `local.properties` is machine-specific and must not be committed to Git. Use only the Supabase anon / publishable key in the Android client. Never place a Supabase `service_role` key, database password, OAuth client secret, or other server secret in the Android app or a public repository.
+
+### 6. Sync and run the app
+
+1. Open the project root in Android Studio.
+2. Select **File → Sync Project with Gradle Files**.
+3. Allow Android Studio to download the required Gradle and Android dependencies.
+4. Start an Android emulator (API 26 or later) or connect an Android device with USB debugging enabled.
+5. Select the `app` run configuration.
+6. Click **Run ▶**.
+
+The expected first-run navigation is:
+
+```text
+Splash Screen
+     ↓
+Onboarding
+     ↓
+Login / Register
+     ↓
+Dashboard
+```
+
+Create a test account and check the Supabase **Authentication** section and **Table Editor** to verify that the account and profile record were created.
+
+### 7. Build from the terminal (optional)
+
+From the project root, a local Gradle installation can build the debug APK:
+
+**Windows PowerShell**
+
+```powershell
+gradle assembleDebug
+```
+
+If the Gradle wrapper scripts and wrapper JAR are available in your local checkout, you can use:
+
+```powershell
+.\gradlew.bat assembleDebug
+```
+
+The repository currently contains Gradle wrapper configuration but may not contain the wrapper scripts/JAR. If the wrapper command reports that `GradleWrapperMain` cannot be found, use Android Studio's Gradle sync or install Gradle 8.7 and generate the wrapper:
+
+```powershell
+gradle wrapper --gradle-version 8.7
+```
+
+The debug APK is normally created at:
+
+```text
+app/build/outputs/apk/debug/app-debug.apk
+```
+
+## 🔐 Security & Privacy
+
+Security is an important part of the project's design.
+
+- Keep local configuration in `local.properties` and secret environment files that are excluded by `.gitignore`.
+- Use the Supabase anon / publishable key in the Android client.
+- Never expose the Supabase `service_role` key in a mobile application or public repository; it can bypass Row Level Security.
+- Keep Row Level Security enabled and review policies before deploying.
+- Do not log access tokens, passwords, credentials, or sensitive financial information.
+- Request sensitive Android permissions only when the related feature is implemented, necessary, and clearly explained to the user.
+- If a real key or password has ever been committed or exposed, revoke or rotate it in the provider dashboard. Removing it from the latest commit does not make the exposed secret safe again.
+
+## 🗺️ Development Roadmap
+
+The following items describe the planned direction of the project. Roadmap items are not claims that the features are already available.
+
+| Phase | Scope | Status |
+|---|---|---|
+| 1 | Android foundation, design system, navigation, and authentication | Foundation implemented |
+| 2 | Database foundation and profile improvements | Database foundation included |
+| 3 | Bank statement upload and transaction import | Planned |
+| 4 | Gmail integration with secure server-side OAuth | Planned |
+| 5 | Notification access and permission centre | Planned |
+| 6 | Policy-compliant SMS integration | Planned |
+| 7 | Financial event processing and local cache | Planned |
+| 8 | Recurring payment, subscription, price-change, and duplicate detection | Planned |
+| 9 | Alerts and notification workflows | Planned |
+| 10 | Gemini-powered AI insights through a server-side function | Planned |
+| 11 | Analytics, budgets, savings, goals, financial health, and reports | Planned |
+| 12 | Security hardening, testing, and release preparation | Planned |
+
+## 🧪 Verification Checklist
+
+When setting up the project on a new machine, verify:
+
+- [ ] `local.properties` contains the correct SDK path and Supabase values.
+- [ ] The required Supabase migrations run without errors.
+- [ ] Android Studio completes Gradle sync.
+- [ ] The app launches on an API 26+ emulator or device.
+- [ ] Registration creates a Supabase Auth user.
+- [ ] A profile record is created for the new user.
+- [ ] Login and password recovery work.
+- [ ] Logout clears the local session.
+- [ ] A returning signed-in user can restore their session.
+- [ ] Navigation between the five main sections works.
+- [ ] Invalid credentials and network failures show understandable errors.
+
+## 🛠️ Troubleshooting
+
+| Issue | What to check |
+|---|---|
+| Supabase connection/configuration message | Confirm `local.properties` exists and contains the correct project URL and publishable key. Sync Gradle again. |
+| Invalid API key | Use the anon / publishable key from the same Supabase project as the URL. Do not use the service-role key. |
+| Authentication request fails | Check internet connectivity, Supabase Auth settings, and local configuration values. |
+| Database request fails | Confirm the required migrations ran successfully and review the relevant RLS policies. |
+| Gradle sync fails | Verify JDK 17, SDK Platform 34, internet connectivity, and the Gradle configuration. |
+| Gradle wrapper JAR is missing | Use Android Studio's Gradle sync or generate the wrapper using an installed Gradle 8.7 distribution. |
+
+For additional project-specific notes, see:
+
+- [`FIX-DATA-NOT-SHOWING.md`](FIX-DATA-NOT-SHOWING.md)
+- [`FIXES-v2.md`](FIXES-v2.md)
+- [`INTEGRATION-NOTES.md`](INTEGRATION-NOTES.md)
+
+## 🤝 Contributing
+
+Contributions, suggestions, and issue reports are welcome.
+
+1. Fork the repository.
+2. Create a feature branch: `git checkout -b feature/your-feature`.
+3. Make your changes and test them.
+4. Commit your changes: `git commit -m "Add: describe your change"`.
+5. Push your branch: `git push origin feature/your-feature`.
+6. Open a Pull Request with a clear description of the changes.
+
+Please do not include API keys, passwords, access tokens, personal information, or local configuration files in commits.
+
+## 📄 License
+
+No license has currently been specified. Unless a license is added to this repository, the default copyright rules apply; reuse, redistribution, and modification are not automatically granted.
 
 ---
 
-## 9. Security notes (already enforced in Phase 1)
+<div align="center">
 
-- No secrets are hardcoded; everything flows from `local.properties` /
-  `.env` (both git-ignored) into `BuildConfig` fields or Edge Function
-  environment variables.
-- Session tokens live only in Android Keystore-backed
-  `EncryptedSharedPreferences`, excluded from Android auto-backup
-  (`res/xml/data_extraction_rules.xml` / `backup_rules.xml`).
-- `AuthInterceptor` only attaches Supabase headers to requests whose host
-  actually matches the configured Supabase URL, so a token can't leak to
-  an unrelated domain even if one is added to the shared OkHttp client later.
-- HTTP logging is capped at `BASIC` (method/URL/status/timing) and fully
-  disabled in release builds - request/response bodies (which can contain
-  tokens or, later, financial data) are never logged.
-- Every table in the schema has Row Level Security enabled with
-  `auth.uid() = user_id` policies; the service_role key never appears
-  anywhere in the Android app.
-#   M o b i l e _ L e a k g u a r d - a i  
- 
+**LeakGuard AI — Build better financial awareness, one insight at a time.**
+
+Made with ☕ and a focus on privacy.
+
+</div>
+'''
+
+out = "/mnt/data/README.md"
+pypandoc.convert_text(readme, "md", format="md", outputfile=out, extra_args=["--standalone"])
+print(f"Created {out} ({os.path.getsize(out):,} bytes)")
